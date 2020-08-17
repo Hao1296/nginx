@@ -33,9 +33,20 @@ struct ngx_shm_zone_s {
     void                     *tag;
 };
 
+/*
+  保存进程生命周期内所需的全局数据.
+  无论master进程/worker进程/cache进程, 都会各自维护一个唯一的ngx_cycle_s实例.
 
+  实例在ngx_init_cycle方法中被创建
+*/
 struct ngx_cycle_s {
+    /*
+      所有模块配置项数据
+    */
     void                  ****conf_ctx;
+    /*
+      内存池
+    */
     ngx_pool_t               *pool;
 
     ngx_log_t                *log;
@@ -47,6 +58,10 @@ struct ngx_cycle_s {
 
     ngx_queue_t               reusable_connections_queue;
 
+    /*
+      维护各监听端口的信息.
+      元素为ngx_listening_t类型
+    */
     ngx_array_t               listening;
     ngx_array_t               pathes;
     ngx_list_t                open_files;
@@ -61,10 +76,22 @@ struct ngx_cycle_s {
 
     ngx_cycle_t              *old_cycle;
 
+    /*
+      配置文件相对于安装目录的相对路径
+    */
     ngx_str_t                 conf_file;
     ngx_str_t                 conf_param;
+    /*
+      配置文件的绝对路径
+    */
     ngx_str_t                 conf_prefix;
+    /*
+      nginx安装路径.
+    */
     ngx_str_t                 prefix;
+    /*
+      进程间同步的锁文件路径
+    */
     ngx_str_t                 lock_file;
     ngx_str_t                 hostname;
 };

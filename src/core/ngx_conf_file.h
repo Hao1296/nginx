@@ -119,8 +119,33 @@ struct ngx_module_s {
 
     ngx_uint_t            version;
 
+    /*
+      模块所携带的上下文数据.
+      类型要和type字段相匹配.
+    */
     void                 *ctx;
     ngx_command_t        *commands;
+    /*
+      模块类型,有如下几种:
+      1. NGX_CORE_MODULE:核心模块;
+      2. 非核心模块(未全部列举)
+        a. NGX_CORE_MODULE:配置模块; 
+        b. NGX_EVENT_MODULE:事件模块;
+        c. NGX_HTTP_MODULE:HTTP模块;
+        d. NGX_MAIL_MODULE:邮件模块;
+
+      核心模块内有一些重要实例, 负责管理所涉及的非核心模块的那几大类.
+      如ngx_events_module负责管理EVENT模块这个大类,
+      ngx_http_module负责管理HTTP模块这个大类, 
+      ngx_mail_module负责管理MAIL模块这个大类......
+
+      nginx框架会调用配置模块和核心模块,不会和其他模块直接产生联系.
+
+      各非核心模块大类内部分别存在一个起管理作用的模块,负责管理大类内部其他模块.
+      如事件模块中的ngx_event_core_module, HTTP模块中的ngx_http_core_module等等
+      (这里吐槽下nginx模块的命名, 核心模块实例不叫XXX_core_module, 
+      但非核心模块实例却用这个命名规则).
+    */
     ngx_uint_t            type;
 
     ngx_int_t           (*init_master)(ngx_log_t *log);
