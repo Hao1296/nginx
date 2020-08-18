@@ -616,7 +616,9 @@ ngx_event_process_init(ngx_cycle_t *cycle)
         }
 
         module = ngx_modules[m]->ctx;
-
+        // 被选用的事件模块的actions.init方法会将自己的action赋值给全局变量ngx_event_actions.
+        // 后面的使用者直接调用ngx_event_actions,
+        // 相当于ngx_event_core_module负责选择具体生效的事件模块
         if (module->actions.init(cycle, ngx_timer_resolution) != NGX_OK) {
             /* fatal */
             exit(2);

@@ -122,6 +122,8 @@ struct ngx_module_s {
     /*
       模块所携带的上下文数据.
       类型要和type字段相匹配.
+
+      事件模块: ngx_event_module_t (ngx_event.h)
     */
     void                 *ctx;
     ngx_command_t        *commands;

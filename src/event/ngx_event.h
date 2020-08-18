@@ -493,7 +493,12 @@ typedef struct {
 
     void                 *(*create_conf)(ngx_cycle_t *cycle);
     char                 *(*init_conf)(ngx_cycle_t *cycle, void *conf);
-
+    /*
+      定义了3类方法:
+      1.事件增删方法(add,del等等);
+      2.事件的处理方法(process_events);
+      3.事件模块初始化及清理方法(init,done)
+    */
     ngx_event_actions_t     actions;
 } ngx_event_module_t;
 
