@@ -142,6 +142,10 @@ typedef struct {
 
 
 typedef struct {
+    /*
+      每个一般http模块在解析server块时会生成ngx_http_core_srv_conf_t结构体实例,
+      并插入该列表
+    */
     ngx_array_t                servers;         /* ngx_http_core_srv_conf_t */
 
     ngx_http_phase_engine_t    phase_engine;
@@ -173,7 +177,9 @@ typedef struct {
     /* array of the ngx_http_server_name_t, "server_name" directive */
     ngx_array_t                 server_names;
 
-    /* server ctx */
+    /* server ctx 
+       即对应模块在server块下的配置项结构体
+     */
     ngx_http_conf_ctx_t        *ctx;
 
     ngx_str_t                   server_name;
