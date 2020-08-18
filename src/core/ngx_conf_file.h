@@ -76,8 +76,17 @@
 
 
 struct ngx_command_s {
+    /*
+      配置项名称
+    */
     ngx_str_t             name;
+    /*
+      制定配置项可出现的位置和可携带的参数个数
+    */
     ngx_uint_t            type;
+    /*
+      配置项参数解析函数
+    */
     char               *(*set)(ngx_conf_t *cf, ngx_command_t *cmd, void *conf);
     ngx_uint_t            conf;
     ngx_uint_t            offset;
