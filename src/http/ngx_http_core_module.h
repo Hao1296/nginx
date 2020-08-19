@@ -96,24 +96,31 @@ typedef struct {
     u_char                     addr[NGX_SOCKADDR_STRLEN + 1];
 } ngx_http_listen_opt_t;
 
-
+/*
+  http阶段可以粗略划分为5个大步骤
+*/
 typedef enum {
+    /********请求头接收完毕*******/
     NGX_HTTP_POST_READ_PHASE = 0,
 
+    /********Location匹配*******/
     NGX_HTTP_SERVER_REWRITE_PHASE,
 
     NGX_HTTP_FIND_CONFIG_PHASE,
     NGX_HTTP_REWRITE_PHASE,
     NGX_HTTP_POST_REWRITE_PHASE,
 
+    /********鉴权*******/
     NGX_HTTP_PREACCESS_PHASE,
 
     NGX_HTTP_ACCESS_PHASE,
     NGX_HTTP_POST_ACCESS_PHASE,
 
+    /********内容生成*******/
     NGX_HTTP_TRY_FILES_PHASE,
     NGX_HTTP_CONTENT_PHASE,
 
+    /********日志*******/
     NGX_HTTP_LOG_PHASE
 } ngx_http_phases;
 
