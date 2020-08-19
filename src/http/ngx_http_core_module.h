@@ -129,6 +129,11 @@ typedef struct ngx_http_phase_handler_s  ngx_http_phase_handler_t;
 typedef ngx_int_t (*ngx_http_phase_handler_pt)(ngx_http_request_t *r,
     ngx_http_phase_handler_t *ph);
 
+/*
+  http阶段处理函数.
+  每个http模块都可以生成处理函数实例,并挂在到
+  ngx_http_core_main_conf_t->phases的对应元素下
+*/
 struct ngx_http_phase_handler_s {
     ngx_http_phase_handler_pt  checker;
     ngx_http_handler_pt        handler;
@@ -335,7 +340,7 @@ struct ngx_http_core_loc_conf_s {
     uint32_t      limit_except;
     void        **limit_except_loc_conf;
 
-    ngx_http_handler_pt  handler;
+    ngx_http_handler_pt  handler; // location下的请求处理函数
 
     /* location name length for inclusive location with inherited alias */
     size_t        alias;
