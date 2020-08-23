@@ -250,7 +250,9 @@ typedef struct {
 typedef void (*ngx_http_upstream_handler_pt)(ngx_http_request_t *r,
     ngx_http_upstream_t *u);
 
-
+/*
+  定义upstream及其访问方式
+*/
 struct ngx_http_upstream_s {
     ngx_http_upstream_handler_pt     read_event_handler;
     ngx_http_upstream_handler_pt     write_event_handler;
@@ -278,14 +280,31 @@ struct ngx_http_upstream_s {
     ngx_chain_t                     *free_bufs;
 
     ngx_int_t                      (*input_filter_init)(void *data);
+    /*
+      定义upstream响应包体的处理逻辑
+    */
     ngx_int_t                      (*input_filter)(void *data, ssize_t bytes);
     void                            *input_filter_ctx;
 
 #if (NGX_HTTP_CACHE)
     ngx_int_t                      (*create_key)(ngx_http_request_t *r);
 #endif
+    /*
+      下方这些回调函数传入的参数ngx_http_request_t指的都是"原始请求",
+      而非发给upstream的请求(发给upstream的请求对应于ngx_http_upstream_s->request_bufs).
+
+      原始请求对应的ngx_http_request_t结构体会设置到ngx_connection_s->data字段, 
+      后者表示和upstream之间的连接.而ngx_connection_s又会被设置到
+      epoll_event->data.ptr, 所以每当upstream socket有事件时都可以获取到原始请求.
+     */
+    /*
+      定义如何构造访问upstream的请求
+    */
     ngx_int_t                      (*create_request)(ngx_http_request_t *r);
     ngx_int_t                      (*reinit_request)(ngx_http_request_t *r);
+    /*
+      定义如何处理upstream响应的header部分
+    */
     ngx_int_t                      (*process_header)(ngx_http_request_t *r);
     void                           (*abort_request)(ngx_http_request_t *r);
     void                           (*finalize_request)(ngx_http_request_t *r,
